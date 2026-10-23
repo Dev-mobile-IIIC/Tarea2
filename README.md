@@ -1,4 +1,4 @@
-# MyFi — Mis Finanzas
+# MyFi: Mis Finanzas
 
 **Entiende adónde va tu dinero y avanza hacia lo que quieres lograr.**
 
@@ -63,5 +63,3 @@ Este proyecto documenta la idea, las pantallas propuestas y los avances del desa
 Se configuró una regla para proteger la rama main y solicitar una revisión antes de integrar cambios mediante Pull Request. Sin embargo, GitHub indica que esta regla no se aplica al repositorio privado con el plan actual de la organización. Por ese motivo, la protección automática de main queda pendiente de habilitar un plan compatible.
 
 ![Aviso de GitHub: la regla de protección no se aplica con el plan actual](img/new%20rule%28cant%20use%29.png)
-
-
