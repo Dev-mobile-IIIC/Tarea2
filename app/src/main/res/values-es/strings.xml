@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">MyFi</string>
+    <string name="income">Ingreso</string>
+    <string name="expense">Gasto</string>
+    <string name="categories">Categorías</string>
+    <string name="transactions">Movimientos</string>
+    <string name="savings_goals">Metas de ahorro</string>
+    <string name="amount">Monto</string>
+    <string name="category">Categoría</string>
+    <string name="date">Fecha</string>
+    <string name="note">Nota</string>
+    <string name="priority">Prioridad</string>
+    <string name="target_amount">Monto objetivo</string>
+    <string name="current_amount">Monto actual</string>
+    <string name="target_date">Fecha objetivo</string>
+    <string name="receipt">Comprobante</string>
+    <string name="location">Ubicación</string>
+    <string name="optional">Opcional</string>
+    <string name="low_priority">Baja</string>
+    <string name="medium_priority">Media</string>
+    <string name="high_priority">Alta</string>
+    <string name="add">Agregar</string>
+    <string name="edit">Editar</string>
+    <string name="save">Guardar</string>
+    <string name="delete">Eliminar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="filter_by_period">Filtrar por periodo</string>
+    <string name="filter_by_type">Filtrar por tipo</string>
+    <string name="filter_by_category">Filtrar por categoría</string>
+    <string name="financial_summary">Resumen financiero</string>
+    <string name="balance">Balance</string>
+    <string name="receipt_permission_note">Puedes adjuntar un comprobante a un movimiento.</string>
+    <string name="location_permission_note">La ubicación es opcional y solo se solicita si eliges agregarla.</string>
+</resources>

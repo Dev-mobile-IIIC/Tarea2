@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">MyFi</string>
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
+    <string name="categories">Categories</string>
+    <string name="transactions">Transactions</string>
+    <string name="savings_goals">Savings goals</string>
+    <string name="amount">Amount</string>
+    <string name="category">Category</string>
+    <string name="date">Date</string>
+    <string name="note">Note</string>
+    <string name="priority">Priority</string>
+    <string name="target_amount">Target amount</string>
+    <string name="current_amount">Current amount</string>
+    <string name="target_date">Target date</string>
+    <string name="receipt">Receipt</string>
+    <string name="location">Location</string>
+    <string name="optional">Optional</string>
+    <string name="low_priority">Low</string>
+    <string name="medium_priority">Medium</string>
+    <string name="high_priority">High</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="filter_by_period">Filter by period</string>
+    <string name="filter_by_type">Filter by type</string>
+    <string name="filter_by_category">Filter by category</string>
+    <string name="financial_summary">Financial summary</string>
+    <string name="balance">Balance</string>
+    <string name="receipt_permission_note">You can attach a receipt to a transaction.</string>
+    <string name="location_permission_note">Location is optional and is requested only when you choose to add it.</string>
 </resources>
