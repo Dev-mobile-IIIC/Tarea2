@@ -10,5 +10,7 @@ data class Transaction(
     val note: String? = null,
     val receiptUri: String? = null,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val locationName: String? = null,
+    val locationAddress: String? = null
 )
