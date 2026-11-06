@@ -65,6 +65,13 @@
     <string name="invalid_amount">Ingresa un monto mayor que cero.</string>
     <string name="required_field">Este campo es obligatorio.</string>
     <string name="delete_confirmation">¿Eliminar este elemento?</string>
+    <string name="search">Buscar</string>
+    <string name="search_transactions">Buscar un movimiento para editar</string>
+    <string name="transaction_search_hint">Nota (vacía para mostrar todos)</string>
+    <string name="transaction_not_found">No se encontró ningún movimiento.</string>
+    <string name="transaction_search_result">%1$s · %2$s · %3$s</string>
+    <string name="transaction_no_note">Sin nota</string>
+    <string name="update_transaction_confirmation">¿Guardar los cambios de este movimiento?</string>
     <string name="receipt_added">Comprobante adjunto</string>
     <string name="no_receipt">No hay comprobante adjunto</string>
     <string name="add_receipt">Agregar comprobante</string>

@@ -53,6 +53,11 @@ Las vistas incluidas son:
 7. Selección de una ubicación en el mapa.
 8. Categorías personalizadas y diálogo para crear una categoría.
 
+## Tarea 5 — Gestión de movimientos
+
+- El formulario permite registrar ingresos y gastos, consultar movimientos existentes, editar sus datos y eliminarlos.
+- La búsqueda filtra por nota y muestra la fecha y el monto de cada coincidencia. Una búsqueda vacía lista todos los movimientos, incluso los que no tienen nota.
+
 ## Alcance
 
 Este proyecto documenta la idea, las pantallas propuestas y los avances del desarrollo. La aplicación se desarrollará por etapas, comenzando por las funciones principales de registro, consulta y organización financiera.

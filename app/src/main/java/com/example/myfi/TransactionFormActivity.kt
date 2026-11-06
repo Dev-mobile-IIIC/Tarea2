@@ -4,19 +4,28 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
 import android.widget.ArrayAdapter
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.example.myfi.databinding.ActivityTransactionFormBinding
 import com.example.myfi.domain.model.CategoryType
 import com.example.myfi.domain.model.Transaction
 import com.example.myfi.viewmodel.CategoryViewModel
 import com.example.myfi.viewmodel.RepositoryViewModelFactory
 import com.example.myfi.viewmodel.TransactionViewModel
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
@@ -55,10 +64,29 @@ class TransactionFormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         binding = ActivityTransactionFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        transactionId = intent.getStringExtra(EXTRA_TRANSACTION_ID)
-        transactionId?.let { load(transactionViewModel.getTransactionById(it)) }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val safeArea = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updatePadding(safeArea.left, safeArea.top, safeArea.right, safeArea.bottom)
+            insets
+        }
+        val id = savedInstanceState?.getString(EXTRA_TRANSACTION_ID)
+            ?: intent.getStringExtra(EXTRA_TRANSACTION_ID)
+        if (id != null) {
+            val transaction = transactionViewModel.getTransactionById(id)
+            if (transaction == null) {
+                Toast.makeText(this, R.string.transaction_not_found, Toast.LENGTH_SHORT).show()
+                finish()
+                return
+            }
+            load(transaction)
+        }
+        binding.btnSearchTransaction.setOnClickListener { showSearch() }
+        binding.btnDeleteTransaction.setOnClickListener { confirmDelete() }
         binding.btnExpenseType.setOnClickListener { type = CategoryType.EXPENSE; selectedCategoryId = null; updateCategories() }
         binding.btnIncomeType.setOnClickListener { type = CategoryType.INCOME; selectedCategoryId = null; updateCategories() }
         binding.btnSelectDate.setOnClickListener { showDatePicker() }
@@ -69,15 +97,58 @@ class TransactionFormActivity : AppCompatActivity() {
         binding.btnRemoveLocation.setOnClickListener { clearLocation() }
         binding.btnSaveTransaction.setOnClickListener { save() }
         binding.btnCancelTransaction.setOnClickListener { finish() }
-        updateDate()
-        updateCategories()
-        updateReceipt()
-        binding.tvLocationSummary.text = locationName ?: locationAddress ?: getString(R.string.no_location)
-        binding.btnRemoveLocation.visibility = if (latitude == null || longitude == null) android.view.View.GONE else android.view.View.VISIBLE
+        if (id == null) {
+            updateDate()
+            updateCategories()
+        }
     }
 
-    private fun load(transaction: Transaction?) {
-        if (transaction == null) { finish(); return }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(EXTRA_TRANSACTION_ID, transactionId)
+    }
+
+    private fun showSearch() {
+        val input = EditText(this).apply {
+            inputType = InputType.TYPE_CLASS_TEXT
+            setSingleLine(true)
+            hint = getString(R.string.transaction_search_hint)
+        }
+        AlertDialog.Builder(this)
+            .setTitle(R.string.search_transactions)
+            .setView(input)
+            .setPositiveButton(R.string.search) { _, _ -> showSearchResults(input.text.toString().trim()) }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun showSearchResults(query: String) {
+        // Search by note so users can find transactions without knowing their IDs.
+        val matches = transactionViewModel.getTransactions().filter {
+            it.note.orEmpty().contains(query, ignoreCase = true)
+        }
+        if (matches.isEmpty()) {
+            Toast.makeText(this, R.string.transaction_not_found, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val currency = NumberFormat.getCurrencyInstance()
+        val labels = matches.map {
+            getString(
+                R.string.transaction_search_result,
+                it.date.toString(),
+                currency.format(it.amount),
+                it.note?.takeIf { note -> note.isNotBlank() } ?: getString(R.string.transaction_no_note)
+            )
+        }
+        AlertDialog.Builder(this)
+            .setTitle(R.string.search_transactions)
+            .setItems(labels.toTypedArray()) { _, position -> load(matches[position]) }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun load(transaction: Transaction) {
+        transactionId = transaction.id
         type = transactionViewModel.getCategoryType(transaction.categoryId) ?: CategoryType.EXPENSE
         selectedCategoryId = transaction.categoryId
         binding.etAmount.setText(transaction.amount.toString())
@@ -88,6 +159,14 @@ class TransactionFormActivity : AppCompatActivity() {
         longitude = transaction.longitude
         locationName = transaction.locationName
         locationAddress = transaction.locationAddress
+        binding.tilAmount.error = null
+        binding.btnSearchTransaction.isVisible = false
+        binding.btnDeleteTransaction.isVisible = true
+        updateDate()
+        updateCategories()
+        updateReceipt()
+        binding.tvLocationSummary.text = locationName ?: locationAddress ?: getString(R.string.no_location)
+        binding.btnRemoveLocation.isVisible = latitude != null && longitude != null
     }
 
     private fun updateCategories() {
@@ -97,8 +176,9 @@ class TransactionFormActivity : AppCompatActivity() {
         selectedCategoryId = selected?.id
         binding.actvCategory.setText(selected?.name.orEmpty(), false)
         binding.actvCategory.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> selectedCategoryId = categories.getOrNull(position)?.id }
-        binding.btnExpenseType.isSelected = type == CategoryType.EXPENSE
-        binding.btnIncomeType.isSelected = type == CategoryType.INCOME
+        binding.transactionTypeGroup.check(
+            if (type == CategoryType.EXPENSE) R.id.btnExpenseType else R.id.btnIncomeType
+        )
     }
 
     private fun showDatePicker() {
@@ -114,7 +194,7 @@ class TransactionFormActivity : AppCompatActivity() {
     private fun updateDate() { binding.tvSelectedDate.text = selectedDate.toString() }
 
     private fun showReceiptChoices() {
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.choose_image_source)
             .setItems(arrayOf(getString(R.string.take_photo), getString(R.string.choose_image))) { _, which ->
                 if (which == 0) takePhoto()
@@ -172,7 +252,30 @@ class TransactionFormActivity : AppCompatActivity() {
             locationName = locationName,
             locationAddress = locationAddress
         )
-        if (transactionId == null) transactionViewModel.addTransaction(transaction) else transactionViewModel.updateTransaction(transaction)
-        finish()
+        if (transactionId == null) {
+            transactionViewModel.addTransaction(transaction)
+            finish()
+        } else {
+            AlertDialog.Builder(this)
+                .setMessage(R.string.update_transaction_confirmation)
+                .setPositiveButton(R.string.save) { _, _ ->
+                    transactionViewModel.updateTransaction(transaction)
+                    finish()
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+        }
+    }
+
+    private fun confirmDelete() {
+        val id = transactionId ?: return
+        AlertDialog.Builder(this)
+            .setMessage(R.string.delete_confirmation)
+            .setPositiveButton(R.string.delete) { _, _ ->
+                transactionViewModel.deleteTransaction(id)
+                finish()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 }

@@ -65,6 +65,13 @@
     <string name="invalid_amount">Enter an amount greater than zero.</string>
     <string name="required_field">This field is required.</string>
     <string name="delete_confirmation">Delete this item?</string>
+    <string name="search">Search</string>
+    <string name="search_transactions">Find a transaction to edit</string>
+    <string name="transaction_search_hint">Note (leave blank to show all)</string>
+    <string name="transaction_not_found">No matching transaction found.</string>
+    <string name="transaction_search_result">%1$s · %2$s · %3$s</string>
+    <string name="transaction_no_note">No note</string>
+    <string name="update_transaction_confirmation">Save changes to this transaction?</string>
     <string name="receipt_added">Receipt attached</string>
     <string name="no_receipt">No receipt attached</string>
     <string name="add_receipt">Add receipt</string>
