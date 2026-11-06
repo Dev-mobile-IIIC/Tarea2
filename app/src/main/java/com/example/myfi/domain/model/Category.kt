@@ -4,7 +4,7 @@ data class Category(
     val id: String,
     val name: String,
     val type: CategoryType,
-    val isDefault: Boolean
+    val isDefault: Boolean = false
 )
 
 enum class CategoryType {

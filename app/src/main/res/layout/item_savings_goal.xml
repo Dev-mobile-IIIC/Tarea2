@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="6dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvGoalPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceLabelLarge" />
+
+        <TextView
+            android:id="@+id/tvGoalName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+        <TextView
+            android:id="@+id/tvGoalProgressText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <ProgressBar
+            android:id="@+id/progressGoal"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:max="100"
+            android:progress="0" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
